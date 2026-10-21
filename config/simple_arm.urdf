@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!-- A 3-joint arm: rotating base (joint1), shoulder (joint2), elbow (joint3). -->
+<robot name="simple_arm">
+
+  <material name="grey"><color rgba="0.6 0.6 0.6 1.0"/></material>
+  <material name="orange"><color rgba="1.0 0.5 0.0 1.0"/></material>
+
+  <link name="world"/>
+
+  <joint name="world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+  </joint>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.05"/>
+      <geometry><cylinder radius="0.1" length="0.1"/></geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.05"/>
+      <geometry><cylinder radius="0.1" length="0.1"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="joint1" type="revolute">
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <origin xyz="0 0 0.1"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14" upper="3.14" effort="10" velocity="1.5"/>
+  </joint>
+
+  <link name="link1">
+    <visual>
+      <origin xyz="0 0 0.05"/>
+      <geometry><cylinder radius="0.05" length="0.1"/></geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.05"/>
+      <geometry><cylinder radius="0.05" length="0.1"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="joint2" type="revolute">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz="0 0 0.1"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="10" velocity="1.5"/>
+  </joint>
+
+  <link name="link2">
+    <visual>
+      <origin xyz="0 0 0.2"/>
+      <geometry><box size="0.05 0.05 0.4"/></geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.2"/>
+      <geometry><box size="0.05 0.05 0.4"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="joint3" type="revolute">
+    <parent link="link2"/>
+    <child link="link3"/>
+    <origin xyz="0 0 0.4"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.5" upper="2.5" effort="10" velocity="1.5"/>
+  </joint>
+
+  <link name="link3">
+    <visual>
+      <origin xyz="0 0 0.15"/>
+      <geometry><box size="0.04 0.04 0.3"/></geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.15"/>
+      <geometry><box size="0.04 0.04 0.3"/></geometry>
+    </collision>
+  </link>
+
+  <!-- Tip of the arm: the link MoveIt moves to pose/position goals. -->
+  <joint name="tool_joint" type="fixed">
+    <parent link="link3"/>
+    <child link="tool0"/>
+    <origin xyz="0 0 0.3"/>
+  </joint>
+
+  <link name="tool0"/>
+
+  <!-- Simulated hardware: commanded joint positions are reported back as-is. -->
+  <ros2_control name="SimpleArmSystem" type="system">
+    <hardware>
+      <plugin>mock_components/GenericSystem</plugin>
+    </hardware>
+    <joint name="joint1">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint2">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint3">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+</robot>

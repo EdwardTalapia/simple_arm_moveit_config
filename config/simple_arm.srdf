@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!-- MoveIt's extra info about the robot: what to plan for, saved poses, and
+     which link pairs never need collision checking. -->
+<robot name="simple_arm">
+
+  <!-- Planning group: the joints from base_link out to the tip. -->
+  <group name="arm">
+    <chain base_link="base_link" tip_link="tool0"/>
+  </group>
+
+  <!-- Named poses, usable as goals (joint values in radians). -->
+  <group_state name="home" group="arm">
+    <joint name="joint1" value="0.0"/>
+    <joint name="joint2" value="0.0"/>
+    <joint name="joint3" value="0.0"/>
+  </group_state>
+  <group_state name="reach" group="arm">
+    <joint name="joint1" value="0.8"/>
+    <joint name="joint2" value="0.7"/>
+    <joint name="joint3" value="1.0"/>
+  </group_state>
+
+  <!-- Neighbouring links touch at their joints; don't count that as collision. -->
+  <disable_collisions link1="base_link" link2="link1" reason="Adjacent"/>
+  <disable_collisions link1="link1" link2="link2" reason="Adjacent"/>
+  <disable_collisions link1="link2" link2="link3" reason="Adjacent"/>
+  <disable_collisions link1="base_link" link2="link2" reason="Never"/>
+
+</robot>

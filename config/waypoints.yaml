@@ -1,0 +1,21 @@
+# Goals for move_to.py, set here instead of as named poses in the SRDF.
+#
+# targets: a tip position (metres, world frame) or joint angles
+#          (radians, joint1 joint2 joint3).
+targets:
+  home:  {joints: [0.0, 0.0, 0.0]}
+  reach: {joints: [0.8, 0.7, 1.0]}
+  side:  {position: [0.3, -0.3, 0.4]}
+
+# chains: steps run in order. A step is a target name, an inline target, or
+# a circle traced by the tip:
+#   circle: {center: [x, y, z], radius: r, plane: xy | xz | yz,
+#            points: per lap, laps: n}
+chains:
+  demo:
+    - reach
+    - side
+    - home
+  circle:
+    - circle: {center: [0.4, 0.0, 0.4], radius: 0.1, plane: yz, points: 16, laps: 1}
+    - home

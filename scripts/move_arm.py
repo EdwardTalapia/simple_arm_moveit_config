@@ -55,8 +55,9 @@ def move(robot, arm, label):
     if plan:
         robot.execute("arm", plan.trajectory, blocking=True)
         print(f"Reached {label}", flush=True)
-    else:
-        print(f"Planning to {label} failed", flush=True)
+        return True
+    print(f"Planning to {label} failed", flush=True)
+    return False
 
 
 def main():

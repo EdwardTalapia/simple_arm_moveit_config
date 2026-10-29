@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+# colcon build/install/log from docker/run.sh
+.ws/
